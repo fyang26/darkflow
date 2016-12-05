@@ -74,7 +74,7 @@ class convolutional(BaseOp):
 			return temp
 		else: return slim.batch_norm(inp, 
 			center = False, scale = True, epsilon = 1e-5,
-			initializers = layer.w, scope = self.scope,
+			param_initializers = layer.w, scope = self.scope,
 			is_training = layer.h['is_training'])
 
 	def speak(self):
