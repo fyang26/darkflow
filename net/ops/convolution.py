@@ -91,10 +91,6 @@ class conv_select(convolutional):
 		args = [l.ksize] * 2 + [l.pad] + [l.stride]
 		args += [l.batch_norm * '+bnorm']
 		args += [l.activation]
-<<<<<<< HEAD
-		msg = 'select {}x{} p={} _{}  {}  {}'.format(*args)
-		return msg
-=======
 		msg = 'sele{}x{}p{}_{}  {}  {}'.format(*args)
 		return msg
 
@@ -106,4 +102,3 @@ class conv_extract(convolutional):
 		args += [l.activation]
 		msg = 'extr {}x{} p={} _{}  {}  {}'.format(*args)
 		return msg
->>>>>>> upstream/master
