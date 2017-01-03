@@ -42,6 +42,12 @@ def preprocess(self, im, allobj = None):
 	if allobj is None: return imsz
 	return imsz#, np.array(im) # for unit testing
 	
+_thresh = dict({
+	'person': .2,
+	'pottedplant': .1,
+	'chair': .12,
+	'tvmonitor': .13
+})
 
 def postprocess(self, net_out, im, save = True):
 	"""
@@ -74,10 +80,7 @@ def postprocess(self, net_out, im, save = True):
 			bx.h =  cords[grid, b, 3] ** sqrt
 			p = probs[grid, :] * bx.c
 			p *= (p > threshold)
-			# mi = np.argmax(p)
-			# mv = p[mi] * (p[mi] > threshold)
 			bx.probs = p
-			# bx.probs *= bx.probs > threshold
 			boxes.append(bx)
 
 	# non max suppress boxes
@@ -99,8 +102,8 @@ def postprocess(self, net_out, im, save = True):
 	for b in boxes:
 		max_indx = np.argmax(b.probs)
 		max_prob = b.probs[max_indx]
-		if max_prob > threshold:
-			label = self.meta['labels'][max_indx]
+		label = self.meta['labels'][max_indx]
+		if max_prob > _thresh.get(label,threshold):
 			left  = int ((b.x - b.w/2.) * w)
 			right = int ((b.x + b.w/2.) * w)
 			top   = int ((b.y - b.h/2.) * h)

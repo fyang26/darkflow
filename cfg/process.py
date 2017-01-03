@@ -21,6 +21,7 @@ def parser(model):
 	h, w, c = [int()]*3; layer = dict()
 	for line in lines:
 		line = line.strip()
+		line = line.split('#')[0]
 		if '[' in line:
 			if layer != dict(): 
 				if layer['type'] == '[net]': 
@@ -38,7 +39,7 @@ def parser(model):
 			try:
 				i = float(_parse(line))
 				if i == int(i): i = int(i)
-				layer[line.split('=')[0]] = i
+				layer[line.split('=')[0].strip()] = i
 			except:
 				try:
 					key = _parse(line, 0)
@@ -154,9 +155,13 @@ def cfg_yielder(model, binary):
 				for num in keep[-keep_n:]:
 					keep += [num + classes]
 			k = 1
+			print len(layers), i-k
 			while layers[i-k]['type'] not in ['[connected]', '[extract]']:
 				k += 1
-			if layers[i-k]['type'] == 'connected':
+				if i-k < 0:
+					break
+			if i-k < 0: l_ = l
+			elif layers[i-k]['type'] == 'connected':
 				l_ = layers[i-k]['output']
 			else:
 				l_ = layers[i-k].get('old',[l])[-1]

@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 
 class reorg(BaseOp):
-	def forward(self):
+	def _forward(self):
 		inp = self.inp.out
 		shape = inp.get_shape().as_list()
 		_, h, w, c = shape
@@ -19,6 +19,12 @@ class reorg(BaseOp):
 				row_i += [flatij]
 			out += [tf.concat(2, row_i)]
 		self.out = tf.concat(1, out)
+
+	def forward(self):
+		inp = self.inp.out
+		s = self.lay.stride
+		self.out = tf.extract_image_patches(
+			inp, [1,s,s,1], [1,s,s,1], [1,1,1,1], 'VALID')
 
 	def speak(self):
 		args = [self.lay.stride] * 2
@@ -72,10 +78,17 @@ class convolutional(BaseOp):
 			temp /= (np.sqrt(layer.w['moving_variance']) + 1e-5)
 			temp *= layer.w['gamma']
 			return temp
-		else: return slim.batch_norm(inp, 
-			center = False, scale = True, epsilon = 1e-5,
-			param_initializers = layer.w, scope = self.scope,
-			is_training = layer.h['is_training'])
+		else: 
+			args = dict({
+				'center' : False, 'scale' : True,
+				'epsilon': 1e-5, 'scope' : self.scope,
+				'is_training': layer.h['is_training']
+				})
+			v = tf.__version__.split('.')[1]
+			if int(v) < 12: key = 'initializers'
+			else: key = 'param_initializers'
+			args.update({key : layer.w})
+			return slim.batch_norm(inp, **args)
 
 	def speak(self):
 		l = self.lay
