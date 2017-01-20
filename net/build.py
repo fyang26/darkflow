@@ -1,10 +1,10 @@
 import tensorflow as tf
 import time
-import flow
-import help
-from ops import op_create, identity
-from ops import HEADER, LINE
-from framework import create_framework
+from . import help
+from . import flow
+from .ops import op_create, identity
+from .ops import HEADER, LINE
+from .framework import create_framework
 from dark.darknet import Darknet
 
 class TFNet(object):
@@ -33,6 +33,7 @@ class TFNet(object):
 		if darknet is None:	
 			darknet = Darknet(FLAGS)
 			self.ntrain = len(darknet.layers)
+			#self.ntrain = 1
 
 		self.darknet = darknet
 		args = [darknet.meta, FLAGS]
