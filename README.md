@@ -1,3 +1,11 @@
+## Intro
+
+Real-time object detection and classification. Paper: [version 1](https://arxiv.org/pdf/1506.02640.pdf), [version 2](https://arxiv.org/pdf/1612.08242.pdf).
+
+Read more about YOLO (in darknet) and download weight files for version 2 [here](http://pjreddie.com/darknet/yolo/).
+
+*Some* weights files for version 1 [here](https://drive.google.com/drive/folders/0B1tW_VtY7onidEwyQ2FtQVplWEU)
+
 ![img](person.jpg)
 
 ## Dependencies
@@ -6,18 +14,13 @@ Python3, tensorflow 0.12, numpy, opencv 3.
 
 ## Update
 
-@[Ryansun](https://github.com/ryansun1900) contributed the **training part of YOLO9000**. The project is now completed :)
-
-Someone's quick and 
 **Android demo is available on Tensorflow's official github!** [here](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/android/src/org/tensorflow/demo/TensorFlowYoloDetector.java)
-
-**Demo in webcam is available!**. Use option `--demo camera` :)
 
 YOLOv1 is up and running:
 - v1.0: `yolo-full` 1.1GB, `yolo-small` 376MB, `yolo-tiny` 180MB
 - v1.1: `yolov1` 789MB, `tiny-yolo` 108MB, `tiny-coco` 268MB, `yolo-coco` 937MB
 
-YOLO9000 is up and running:
+YOLOv2 is up and running:
 - `yolo` 270MB, `tiny-yolo-voc` 63 MB.
 
 ### Parsing the annotations
@@ -110,6 +113,12 @@ During training, the script will occasionally save intermediate results into Ten
 ./flow --train --model cfg/yolo-tiny.cfg --load bin/yolo-tiny.weights
 ```
 
+### Camera demo
+
+```bash
+./flow --model cfg/yolo-3c.cfg --load bin/yolo-3c.weights --demo camera
+```
+
 ### Migrating the graph to mobile devices (JAVA / C++ / Objective-C++)
 
 ```bash
@@ -117,6 +126,6 @@ During training, the script will occasionally save intermediate results into Ten
 ./flow --model cfg/yolo-3c.cfg --load -1 --savepb
 ```
 
-For further usage of this protobuf file, please refer to the official documentation of `Tensorflow` on C++ API [_here_](https://www.tensorflow.org/versions/r0.9/api_docs/cc/index.html). To run it on, say, iOS application, simply add the file to Bundle Resources and update the path to this file inside source code.
+The name of input tensor and output tensor are respectively `'input'` and `'output'`. For further usage of this protobuf file, please refer to the official documentation of `Tensorflow` on C++ API [_here_](https://www.tensorflow.org/versions/r0.9/api_docs/cc/index.html). To run it on, say, iOS application, simply add the file to Bundle Resources and update the path to this file inside source code.
 
 That's all.
